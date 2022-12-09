@@ -2,7 +2,7 @@ import express from 'express'
 import {videosRouter} from "./routers/videos-router"
 import {testRouter} from "./routers/test-router"
 
-const app = express()
+export const app = express()
 const PORT = process.env.PORT || 5000
 
 export const HTTP_STATUSES = {
