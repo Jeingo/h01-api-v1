@@ -47,16 +47,18 @@ videosRouter.post('/', (req, res) => {
         return
     }
 
-    const time = new Date().toISOString()
+    const tmpTime = new Date()
+    const timeCreate = tmpTime.toISOString()
+    const timePub = new Date(tmpTime.setDate((tmpTime.getDate() + 1))).toISOString()
 
     const createdVideo = {
-        id: +(new Date()),
+        id: +(tmpTime),
         title: req.body.title,
         author: req.body.author,
         canBeDownloaded: false,
         minAgeRestriction: null,
-        createdAt: time,
-        publicationDate: time,
+        createdAt: timeCreate,
+        publicationDate: timePub,
         availableResolutions: req.body.availableResolutions
     }
 
