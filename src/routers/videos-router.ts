@@ -10,15 +10,15 @@ videosRouter.get('/', (req, res) => {
 
 videosRouter.post('/', (req, res) => {
 
-    if(!req.body.title) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Title is empty',
-                field: 'title'
-            }]
-        })
-        return
-    }
+    // if(!req.body.title) {
+    //     res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
+    //         errorsMessages: [{
+    //             message: 'Title is empty',
+    //             field: 'title'
+    //         }]
+    //     })
+    //     return
+    // }
     if(req.body.title.length > 40) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
             errorsMessages: [{
@@ -28,15 +28,15 @@ videosRouter.post('/', (req, res) => {
         })
         return
     }
-    if(!req.body.author) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Author is empty',
-                field: 'author'
-            }]
-        })
-        return
-    }
+    // if(!req.body.author) {
+    //     res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
+    //         errorsMessages: [{
+    //             message: 'Author is empty',
+    //             field: 'author'
+    //         }]
+    //     })
+    //     return
+    // }
     if(req.body.author.length > 20) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
             errorsMessages: [{
