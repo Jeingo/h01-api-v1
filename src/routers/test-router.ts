@@ -3,6 +3,7 @@ import {db, HTTP_STATUSES} from "../index"
 
 export const testRouter = Router({})
 
-testRouter.get('/', (req, res) => {
-
+testRouter.delete('/', (req, res) => {
+    db.videos = []
+    res.sendStatus((HTTP_STATUSES.NO_CONTENT_204))
 })
