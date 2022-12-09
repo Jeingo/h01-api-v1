@@ -14,7 +14,20 @@ export const HTTP_STATUSES = {
     BAD_REQUEST_400: 400
 }
 
-
+export const db = {
+    videos: [
+        {
+            id: 0,
+            title: "Lesson 1",
+            author: "Jeingo",
+            canBeDownloaded: true,
+            minAgeRestriction: null,
+            createdAt: "2022-12-09T17:58:07.464Z",
+            publicationDate: "2022-12-09T17:58:07.464Z",
+            availableResolutions: ["P144"]
+        }
+    ]
+}
 
 app.use(express.json())
 
