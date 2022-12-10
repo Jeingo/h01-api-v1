@@ -137,7 +137,7 @@ videosRouter.put('/:id', (req, res) => {
             field: 'availableResolutions'
         })
     }
-    if(+req.body.minAgeRestriction < 1 && +req.body.minAgeRestriction > 18) {
+    if(+req.body.minAgeRestriction < 1 || +req.body.minAgeRestriction > 18) {
         err.errorsMessages.push({
             message: 'Field minAgeRestriction less than 1 and more than 18',
             field: 'minAgeRestriction'
