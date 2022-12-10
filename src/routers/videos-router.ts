@@ -1,8 +1,18 @@
 import {Router} from 'express'
 import {db, HTTP_STATUSES} from "../index"
 
-
 export const videosRouter = Router({})
+
+const arrayAvailableResolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
+
+function checkContainsResolutions(resolutions: any){
+    for(let i = 0; i < resolutions.length; i++){
+        if(arrayAvailableResolutions.indexOf(resolutions[i]) == -1) {
+            return false
+        }
+    }
+    return true
+}
 
 videosRouter.get('/', (req, res) => {
     res.status(HTTP_STATUSES.OK_200).json(db.videos)
@@ -35,6 +45,13 @@ videosRouter.post('/', (req, res) => {
         err.errorsMessages.push({
             message: 'Author is more than allowed 20 characters',
             field: 'author'
+        })
+    }
+
+    if(checkContainsResolutions(req.body.availableResolutions)) {
+        err.errorsMessages.push({
+            message: 'Field availableResolutions has invalid data',
+            field: 'availableResolutions'
         })
     }
 
@@ -112,6 +129,18 @@ videosRouter.put('/:id', (req, res) => {
         err.errorsMessages.push({
             message: 'Field canBeDownloaded is not boolean',
             field: 'canBeDownloaded'
+        })
+    }
+    if(checkContainsResolutions(req.body.availableResolutions)) {
+        err.errorsMessages.push({
+            message: 'Field availableResolutions has invalid data',
+            field: 'availableResolutions'
+        })
+    }
+    if(+req.body.minAgeRestriction < 1 && +req.body.minAgeRestriction > 18) {
+        err.errorsMessages.push({
+            message: 'Field minAgeRestriction less than 1 and more than 18',
+            field: 'minAgeRestriction'
         })
     }
     if(err.errorsMessages.length > 0) {
