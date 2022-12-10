@@ -149,6 +149,7 @@ videosRouter.put('/:id', (req, res) => {
             field: 'publicationDate'
         })
     }
+
     if(err.errorsMessages.length > 0) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
         return
