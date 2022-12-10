@@ -8,10 +8,10 @@ const arrayAvailableResolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P10
 function checkContainsResolutions(resolutions: any){
     for(let i = 0; i < resolutions.length; i++){
         if(arrayAvailableResolutions.indexOf(resolutions[i]) == -1) {
-            return false
+            return true
         }
     }
-    return true
+    return false
 }
 
 videosRouter.get('/', (req, res) => {
