@@ -19,25 +19,25 @@ videosRouter.post('/', (req, res) => {
             message: 'Title is empty',
             field: 'title'
         })
-    }
-    if(req.body.title.length > 40) {
+    } else  if (req.body.title.length > 40){
         err.errorsMessages.push({
             message: 'Title is more than allowed 40 characters',
             field: 'title'
         })
     }
+
     if(!req.body.author) {
         err.errorsMessages.push({
             message: 'Author is empty',
             field: 'author'
         })
-    }
-    if(req.body.author.length > 20) {
+    } else if (req.body.author.length > 20) {
         err.errorsMessages.push({
             message: 'Author is more than allowed 20 characters',
             field: 'author'
         })
     }
+
     if(err.errorsMessages.length > 0) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
         return
@@ -90,20 +90,19 @@ videosRouter.put('/:id', (req, res) => {
             message: 'Title is empty',
             field: 'title'
         })
-    }
-    if(req.body.title.length > 40) {
+    } else  if (req.body.title.length > 40){
         err.errorsMessages.push({
             message: 'Title is more than allowed 40 characters',
             field: 'title'
         })
     }
+
     if(!req.body.author) {
         err.errorsMessages.push({
             message: 'Author is empty',
             field: 'author'
         })
-    }
-    if(req.body.author.length > 20) {
+    } else if (req.body.author.length > 20) {
         err.errorsMessages.push({
             message: 'Author is more than allowed 20 characters',
             field: 'author'
