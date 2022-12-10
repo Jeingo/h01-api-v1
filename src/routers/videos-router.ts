@@ -10,40 +10,36 @@ videosRouter.get('/', (req, res) => {
 
 videosRouter.post('/', (req, res) => {
 
-    // if(!req.body.title) {
-    //     res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-    //         errorsMessages: [{
-    //             message: 'Title is empty',
-    //             field: 'title'
-    //         }]
-    //     })
-    //     return
-    // }
-    if(req.body.title.length > 40) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Title is more than allowed 40 characters',
-                field: 'title'
-            }]
-        })
-        return
+    const err: any = {
+        errorsMessages: []
     }
-    // if(!req.body.author) {
-    //     res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-    //         errorsMessages: [{
-    //             message: 'Author is empty',
-    //             field: 'author'
-    //         }]
-    //     })
-    //     return
-    // }
-    if(req.body.author.length > 20) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Author is more than allowed 20 characters',
-                field: 'author'
-            }]
+
+    if(!req.body.title) {
+        err.errorsMessages.push({
+            message: 'Title is empty',
+            field: 'title'
         })
+    }
+    if(req.body.title.length > 40) {
+        err.errorsMessages.push({
+            message: 'Title is more than allowed 40 characters',
+            field: 'title'
+        })
+    }
+    if(!req.body.author) {
+        err.errorsMessages.push({
+            message: 'Author is empty',
+            field: 'author'
+        })
+    }
+    if(req.body.author.length > 20) {
+        err.errorsMessages.push({
+            message: 'Author is more than allowed 20 characters',
+            field: 'author'
+        })
+    }
+    if(err.errorsMessages.length > 0) {
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
         return
     }
 
@@ -85,40 +81,42 @@ videosRouter.put('/:id', (req, res) => {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return
     }
+    const err: any = {
+        errorsMessages: []
+    }
+
     if(!req.body.title) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Title is empty',
-                field: 'title'
-            }]
+        err.errorsMessages.push({
+            message: 'Title is empty',
+            field: 'title'
         })
-        return
     }
     if(req.body.title.length > 40) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Title is more than allowed 40 characters',
-                field: 'title'
-            }]
+        err.errorsMessages.push({
+            message: 'Title is more than allowed 40 characters',
+            field: 'title'
         })
-        return
     }
     if(!req.body.author) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Author is empty',
-                field: 'author'
-            }]
+        err.errorsMessages.push({
+            message: 'Author is empty',
+            field: 'author'
         })
-        return
     }
     if(req.body.author.length > 20) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json({
-            errorsMessages: [{
-                message: 'Author is more than allowed 20 characters',
-                field: 'author'
-            }]
+        err.errorsMessages.push({
+            message: 'Author is more than allowed 20 characters',
+            field: 'author'
         })
+    }
+    if(typeof (req.body.canBeDownloaded) !== 'boolean') {
+        err.errorsMessages.push({
+            message: 'Field canBeDownloaded is not boolean',
+            field: 'canBeDownloaded'
+        })
+    }
+    if(err.errorsMessages.length > 0) {
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
         return
     }
 
