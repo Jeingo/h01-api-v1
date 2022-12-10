@@ -143,6 +143,12 @@ videosRouter.put('/:id', (req, res) => {
             field: 'minAgeRestriction'
         })
     }
+    if(typeof(req.body.publicationDate) !== 'string') {
+        err.errorsMessages.push({
+            message: 'Field publicationDate should be sting type',
+            field: 'publicationDate'
+        })
+    }
     if(err.errorsMessages.length > 0) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
         return
