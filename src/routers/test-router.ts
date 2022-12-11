@@ -5,5 +5,5 @@ export const testRouter = Router({})
 
 testRouter.delete('/', (req, res) => {
     db.videos = []
-    res.sendStatus((HTTP_STATUSES.NO_CONTENT_204))
+    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

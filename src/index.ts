@@ -32,7 +32,6 @@ export const db = {
 app.use(express.json())
 
 app.use('/videos', videosRouter)
-
 app.use('/testing/all-data', testRouter)
 
 app.listen(PORT, () => {

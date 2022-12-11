@@ -2,14 +2,19 @@ import request from 'supertest'
 import {app, db, HTTP_STATUSES} from "../../src"
 
 describe('/videos', () => {
-    it('should return 200 and array objects h01.Video', async () => {
-        await request(app)
-            .get('/videos')
-            .expect(HTTP_STATUSES.OK_200, db.videos)
+
+    beforeAll(async () => {
+        await request(app).delete('/testing/all-data')
     })
 
-    let createdVideo = null
-    it('should return 201 and created object h01.Video', async () => {
+    it('GET /videos - should return 200 and empty array', async () => {
+        await request(app)
+            .get('/videos')
+            .expect(HTTP_STATUSES.OK_200,[])
+    })
+
+    let createdVideo: any = null
+    it('POST /videos - should return 201 and created object h01.Video', async () => {
         const data = {
             title: 'Test',
             author: 'Unknown',
@@ -31,4 +36,26 @@ describe('/videos', () => {
             availableResolutions: ['P144']
         })
     })
+    it('GET /videos - should return 200 and array objects h01.Video', async () => {
+        await request(app)
+            .get('/videos')
+            .expect(HTTP_STATUSES.OK_200, db.videos)
+    })
+    it('GET /videos/:id - should return 404', async () => {
+        await request(app)
+            .get('/videos/0')
+            .expect(HTTP_STATUSES.NOT_FOUND_404)
+    })
+    it('POST /videos/ - should not create object h01.Video with incorrect input data', async () => {
+        const data = {
+            title: 'TestTestTestTestTestTestTestTestTestTest_43',
+            author: 'TestTestTestTestTest_23',
+            availableResolutions: ['P']
+        }
+        await request(app)
+            .post('/videos/')
+            .send(data)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
+    })
+
 })
