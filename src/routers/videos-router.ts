@@ -1,11 +1,12 @@
-import {Router} from 'express'
-import {db, HTTP_STATUSES} from "../index"
+import {Router, Request, Response} from 'express'
+import {HTTP_STATUSES} from "../index"
+import {videosRepositories} from "../repositories/videos-repositories"
 
 export const videosRouter = Router({})
 
-const arrayAvailableResolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
+const arrayAvailableResolutions : Array<string> = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
 
-function checkContainsResolutions(resolutions: any){
+function checkContainsResolutions(resolutions: Array<string>){
     for(let i = 0; i < resolutions.length; i++){
         if(arrayAvailableResolutions.indexOf(resolutions[i]) == -1) {
             return true
@@ -14,11 +15,12 @@ function checkContainsResolutions(resolutions: any){
     return false
 }
 
-videosRouter.get('/', (req, res) => {
-    res.status(HTTP_STATUSES.OK_200).json(db.videos)
+videosRouter.get('/', (req: Request, res: Response) => {
+    const allVideos = videosRepositories.getAllVideos()
+    res.status(HTTP_STATUSES.OK_200).json(allVideos)
 })
 
-videosRouter.post('/', (req, res) => {
+videosRouter.post('/', (req: Request, res: Response) => {
 
     const err: any = {
         errorsMessages: []
@@ -60,28 +62,13 @@ videosRouter.post('/', (req, res) => {
         return
     }
 
-    const tmpTime = new Date()
-    const timeCreate = tmpTime.toISOString()
-    const timePub = new Date(tmpTime.setDate((tmpTime.getDate() + 1))).toISOString()
-
-    const createdVideo = {
-        id: +(tmpTime),
-        title: req.body.title,
-        author: req.body.author,
-        canBeDownloaded: false,
-        minAgeRestriction: null,
-        createdAt: timeCreate,
-        publicationDate: timePub,
-        availableResolutions: req.body.availableResolutions
-    }
-
-    db.videos.push(createdVideo)
-
+    const createdVideo = videosRepositories.createVideo(req.body.title, req.body.author, req.body.availableResolutions)
     res.status(HTTP_STATUSES.CREATED_201).json(createdVideo)
 })
 
-videosRouter.get('/:id', (req, res) => {
-    const foundVideo = db.videos.find(v => v.id === +req.params.id)
+videosRouter.get('/:id', (req: Request, res: Response) => {
+
+    const foundVideo = videosRepositories.getVideoById(+req.params.id)
 
     if(!foundVideo) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -91,8 +78,8 @@ videosRouter.get('/:id', (req, res) => {
     res.json(foundVideo)
 })
 
-videosRouter.put('/:id', (req, res) => {
-    const foundVideo = db.videos.find(v => v.id === +req.params.id)
+videosRouter.put('/:id', (req: Request, res: Response) => {
+    const foundVideo = videosRepositories.updateVideo(+req.params.id)
 
     if(!foundVideo) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -164,15 +151,14 @@ videosRouter.put('/:id', (req, res) => {
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
-videosRouter.delete('/:id', (req, res) => {
+videosRouter.delete('/:id', (req: Request, res: Response) => {
 
-    const foundVideo = db.videos.find(v => v.id === +req.params.id)
+    const foundVideo = videosRepositories.deleteVideo(+req.params.id)
 
     if(!foundVideo) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return
     }
 
-    db.videos = db.videos.filter(v => v.id !== +req.params.id)
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

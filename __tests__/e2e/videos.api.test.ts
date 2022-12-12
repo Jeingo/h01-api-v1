@@ -1,5 +1,6 @@
 import request from 'supertest'
-import {app, db, HTTP_STATUSES} from "../../src"
+import {app, HTTP_STATUSES} from "../../src"
+import {videosRepositories} from "../../src/repositories/videos-repositories"
 
 describe('/videos', () => {
 
@@ -39,7 +40,7 @@ describe('/videos', () => {
     it('GET /videos - should return 200 and array objects h01.Video', async () => {
         await request(app)
             .get('/videos')
-            .expect(HTTP_STATUSES.OK_200, db.videos)
+            .expect(HTTP_STATUSES.OK_200, videosRepositories.getAllVideos())
     })
     it('GET /videos/:id - should return 404', async () => {
         await request(app)
