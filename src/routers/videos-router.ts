@@ -1,6 +1,7 @@
 import {Router, Request, Response} from 'express'
 import {HTTP_STATUSES} from "../index"
 import {videosRepositories} from "../repositories/videos-repositories"
+import {authorValidation, inputValidationMiddleware, titleValidation} from "../middlewares/input-validation-middleware"
 
 export const videosRouter = Router({})
 
@@ -20,47 +21,51 @@ videosRouter.get('/', (req: Request, res: Response) => {
     res.status(HTTP_STATUSES.OK_200).json(allVideos)
 })
 
-videosRouter.post('/', (req: Request, res: Response) => {
+videosRouter.post('/',
+    titleValidation,
+    authorValidation,
+    inputValidationMiddleware,
+    (req: Request, res: Response) => {
 
-    const err: any = {
-        errorsMessages: []
-    }
-
-    if(!req.body.title) {
-        err.errorsMessages.push({
-            message: 'Title is empty',
-            field: 'title'
-        })
-    } else  if (req.body.title.length > 40){
-        err.errorsMessages.push({
-            message: 'Title is more than allowed 40 characters',
-            field: 'title'
-        })
-    }
-
-    if(!req.body.author) {
-        err.errorsMessages.push({
-            message: 'Author is empty',
-            field: 'author'
-        })
-    } else if (req.body.author.length > 20) {
-        err.errorsMessages.push({
-            message: 'Author is more than allowed 20 characters',
-            field: 'author'
-        })
-    }
-
-    if(checkContainsResolutions(req.body.availableResolutions)) {
-        err.errorsMessages.push({
-            message: 'Field availableResolutions has invalid data',
-            field: 'availableResolutions'
-        })
-    }
-
-    if(err.errorsMessages.length > 0) {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
-        return
-    }
+    // const err: any = {
+    //     errorsMessages: []
+    // }
+    //
+    // if(!req.body.title) {
+    //     err.errorsMessages.push({
+    //         message: 'Title is empty',
+    //         field: 'title'
+    //     })
+    // } else  if (req.body.title.length > 40){
+    //     err.errorsMessages.push({
+    //         message: 'Title is more than allowed 40 characters',
+    //         field: 'title'
+    //     })
+    // }
+    //
+    // if(!req.body.author) {
+    //     err.errorsMessages.push({
+    //         message: 'Author is empty',
+    //         field: 'author'
+    //     })
+    // } else if (req.body.author.length > 20) {
+    //     err.errorsMessages.push({
+    //         message: 'Author is more than allowed 20 characters',
+    //         field: 'author'
+    //     })
+    // }
+    //
+    // if(checkContainsResolutions(req.body.availableResolutions)) {
+    //     err.errorsMessages.push({
+    //         message: 'Field availableResolutions has invalid data',
+    //         field: 'availableResolutions'
+    //     })
+    // }
+    //
+    // if(err.errorsMessages.length > 0) {
+    //     res.status(HTTP_STATUSES.BAD_REQUEST_400).json(err)
+    //     return
+    // }
 
     const createdVideo = videosRepositories.createVideo(req.body.title, req.body.author, req.body.availableResolutions)
     res.status(HTTP_STATUSES.CREATED_201).json(createdVideo)
