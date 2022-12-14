@@ -1,4 +1,16 @@
-const db = {
+type TypeVideo = {
+            id: number
+            title: string
+            author: string
+            canBeDownloaded: boolean | null
+            minAgeRestriction: number | null
+            createdAt: string
+            publicationDate: string
+            availableResolutions: Array<string> | null
+        }
+
+
+const db : {videos: Array<TypeVideo>} = {
     videos: [
         {
             id: 0,
@@ -17,7 +29,7 @@ export const videosRepositories = {
     getAllVideos() {
         return db.videos
     },
-    createVideo(title: string, author: string, availableResolutions: Array<string>) {
+    createVideo(title: string, author: string, availableResolutions: Array<string> | null) {
         const tmpTime = new Date()
         const timeCreate = tmpTime.toISOString()
         const timePub = new Date(tmpTime.setDate((tmpTime.getDate() + 1))).toISOString()
@@ -30,7 +42,7 @@ export const videosRepositories = {
             minAgeRestriction: null,
             createdAt: timeCreate,
             publicationDate: timePub,
-            availableResolutions: availableResolutions
+            availableResolutions: availableResolutions ? availableResolutions : null
         }
 
         db.videos.push(createdVideo)
